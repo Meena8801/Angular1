@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-lg  db-contact-nav">
+  <div class="container-fluid">
+    <a class="navbar-brand text-white" href="#">DB</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link text-white" routerLink="/" routerLinkActive="active">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" routerLink="/chat" routerLinkActive="active">Chat</a>
+        </li>
+
+      </ul>
+      <form class="d-flex" role="search">
+        <div class="dropdown">
+          <button class="btn text-white dropdown-toggle" type="button" (click)="openUsers()" data-bs-toggle="dropdown" aria-expanded="false">
+           {{appService?.currentUser?.fName}}
+          </button>
+          <ul class="dropdown-menu" id="dropdownMenuButton1">
+            <li><a class="dropdown-item" (click)="setCurrenUser(item)" *ngFor="let item of appService.contactList">{{item.fName}}</a></li>
+          </ul>
+        </div>
+        </form>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container mt-3">
+  <!-- <app-contacts></app-contacts> -->
+  <router-outlet></router-outlet>
+</div>

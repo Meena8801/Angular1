@@ -1,0 +1,101 @@
+<div class="row">
+  <div class="col-md-6">
+    <h4>Contacts</h4>
+  </div>
+  <div class="col-md-6 text-end">
+    <button type="button" class="btn btn-outline-primary" (click)="open()">Add Contacts</button>
+  </div>
+</div>
+
+<table class="table mt-2">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Phone number</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of appService.contactList ; let i = index">
+      <th scope="row">{{i+1}}</th>
+      <td>{{item.fName}}</td>
+      <td>{{item.email}}</td>
+      <td>{{item.pNumber}}</td>
+      <td><span (click)="open()" class="material-symbols-rounded me-2 hover-icon text-success" (click)="viewContact(item)">visibility</span>
+        <span (click)="open()" class="material-symbols-rounded me-2 hover-icon text-success" (click)="editContact(item)">edit</span>
+        <span class="material-symbols-rounded text-danger hover-icon" (click)="deleteContact(item)">delete</span>
+      </td>
+
+    </tr>
+    <tr *ngIf="appService.contactList.length ===0">
+      <td colspan="5" class="text-center">No Data Found!</td>
+     
+    </tr>
+
+  </tbody>
+</table>
+
+
+
+<ng-template #contactModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" >{{!this.contactFormObject.value.code?'Create':isViewContact?'View' :'Update'}}  Contacts</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="onCloseModal()"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="contactFormObject">
+      <div class="row">
+        <div class="col-md-12 col-sm-12">
+          <div class="mb-3">
+            <label class="form-label">Full name</label>
+            <input type="text" class="form-control" [readonly]="isViewContact" formControlName="fName">
+            <div class="form-text text-danger "
+              *ngIf="contactFormObject.controls['fName']?.errors?.required && isErrForm">
+              This field is required
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-12 col-sm-12">
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" [readonly]="isViewContact" formControlName="email">
+            <div class="form-text text-danger "
+              *ngIf="contactFormObject.controls['email']?.errors?.required && isErrForm">
+              This field is required
+            </div>
+            <div class="form-text text-danger "
+              *ngIf="!contactFormObject.controls['email']?.errors?.required && contactFormObject.controls['email']?.errors?.email && isErrForm">
+              Please provide a valid Email.
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 col-sm-12">
+          <div class="mb-3">
+            <label class="form-label">Phone number</label>
+            <input type="text"   maxlength="10"   minlength="10" class="form-control" [readonly]="isViewContact" formControlName="pNumber">
+            <div id="emailHelp" class="form-text text-danger "
+              *ngIf="contactFormObject.controls['pNumber']?.errors?.required && isErrForm">
+              This field is required
+            </div>
+    
+            <div class="form-text text-danger "
+            *ngIf="!contactFormObject.controls['pNumber']?.errors?.pattern && contactFormObject.controls['pNumber']?.dirty && contactFormObject.controls['pNumber']?.errors?.minlength || contactFormObject.controls['pNumber']?.errors?.maxlength">
+            Please provide a min 10 digit phone number.
+          </div>
+          <div class="form-text text-danger "
+          *ngIf="contactFormObject.controls['pNumber']?.dirty && contactFormObject.controls['pNumber']?.errors?.pattern">
+          Please provide a number only.
+        </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer" *ngIf="!isViewContact">
+    <button type="button" class="btn btn-outline-success" (click)="submitContactForm()">{{!this.contactFormObject.value.code?'Save':'Update'}}</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="onCloseModal()">Cancel</button>
+  </div>
+</ng-template>
